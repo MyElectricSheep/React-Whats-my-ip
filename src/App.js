@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import cogoToast from "cogo-toast";
 
 // Semantic UI imports
 import { Image } from "semantic-ui-react";
@@ -19,6 +20,7 @@ import "semantic-ui-css/semantic.min.css";
 const App = () => {
   const bermudaTriangleLocation = [27.380863, -71.18844];
   const [location, setLocation] = useState({});
+  const [coordinates, setCoordinates] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -131,6 +133,45 @@ const App = () => {
     getLocationData();
   }, [REACT_APP_IPIFY_API_KEY]);
 
+  // You can use the geolocation API of the browser to determine
+  // a user's location easily (the user will choose whether
+  // to accept or not) and more precisely
+  // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+  useEffect(() => {
+    const message =
+      "The map's location will only be based on your IP address 😉";
+    if (!navigator.geolocation) {
+      cogoToast.warn(
+        <div>
+          <strong>
+            Oh no! Geolocation is not available through your current browser!
+          </strong>
+          <p>{message}</p>
+        </div>
+      );
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCoordinates([position.coords.latitude, position.coords.longitude]);
+          cogoToast.success(
+            <div>
+              <strong>Thank you for accepting to be geolocated!</strong>
+              <p>The map now shows your precise location.</p>
+            </div>
+          );
+        },
+        () => {
+          cogoToast.warn(
+            <div>
+              <strong>Geolocation denied!</strong>
+              <p>{message}</p>
+            </div>
+          );
+        }
+      );
+    }
+  }, []);
+
   if (isLoading || isError) {
     return (
       <div className="center">
@@ -139,7 +180,7 @@ const App = () => {
           <>
             <Image src={IpLogo} />
             <h1 className="errorText errorBig">
-              There was a problem loading your location data{" "}
+              There was a problem loading your ip/location data{" "}
               <span role="img" aria-label="poop emoji">
                 💩
               </span>
@@ -160,6 +201,9 @@ const App = () => {
     );
   }
 
+  const lat = coordinates ? coordinates[0] : location.lat;
+  const lng = coordinates ? coordinates[1] : location.lng;
+
   return (
     <div className="App">
       <>
@@ -171,7 +215,7 @@ const App = () => {
           <InfoCard data={location} />
         </div>
         <div className="leaflet-container">
-          <UserMap position={[location.lat, location.lng]} zoom={13} />
+          <UserMap position={[lat, lng]} zoom={13} />
         </div>
       </>
     </div>
