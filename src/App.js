@@ -24,6 +24,77 @@ const App = () => {
 
   const { REACT_APP_IPIFY_API_KEY } = process.env;
 
+  // Option 1: the then chain
+  // Chain multiple thens together (on the same level, no callback style imbrication)
+  // And make the data flow down the then chain
+  // Don't forget to return from your then if you want the data to be available further down!
+  // https://javascript.info/promise-chaining
+  // https://nodejs.dev/learn/understanding-javascript-promises
+  //   useEffect(() => {
+  //     let ipify;
+  //     setIsLoading(true);
+  //     axios
+  //       .get(`https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`)
+  //       .then(({ data: ipifyData }) => {
+  //         ipify = ipifyData;
+  //         return axios.get(
+  //           `https://restcountries.eu/rest/v2/alpha/${ipifyData.location.country}`
+  //         );
+  //       })
+  //       .then(({ data: restCountriesData }) => {
+  //         setLocation({
+  //           ip: ipify.ip,
+  //           lat: ipify.location.lat,
+  //           lng: ipify.location.lng,
+  //           country: restCountriesData.name,
+  //           region: ipify.location.region,
+  //           city: ipify.location.city,
+  //           timezone: ipify.location.timezone,
+  //           countryData: restCountriesData,
+  //         });
+  //         setIsLoading(false);
+  //       })
+  //       .catch((e) => {
+  //         console.log(e.message);
+  //         setIsError(true);
+  //         setIsLoading(false);
+  //       });
+  //   }, [REACT_APP_IPIFY_API_KEY]);
+
+  // Option 2:split the chain apart in single pieces that you need,
+  // and use Promise.all to bring them all together
+  //   useEffect(() => {
+  //     setIsLoading(true);
+  //     const ipData = axios.get(
+  //       `https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`
+  //     );
+  //     const geoData = ipData.then((res) =>
+  //       axios.get(
+  //         `https://restcountries.eu/rest/v2/alpha/${res.data.location.country}`
+  //       )
+  //     );
+  //     Promise.all([ipData, geoData])
+  //       .then(([ip, geo]) => {
+  //         setLocation({
+  //           ip: ip.data.ip,
+  //           lat: ip.data.location.lat,
+  //           lng: ip.data.location.lng,
+  //           region: ip.data.location.region,
+  //           city: ip.data.location.city,
+  //           timezone: ip.data.location.timezone,
+  //           country: geo.data.name,
+  //           countryData: geo.data,
+  //         });
+  //         setIsLoading(false);
+  //       })
+  //       .catch((e) => {
+  //         console.log(e.message);
+  //         setIsError(true);
+  //         setIsLoading(false);
+  //       });
+  //   }, [REACT_APP_IPIFY_API_KEY]);
+
+  // Option 3: use async/await
   useEffect(() => {
     setIsLoading(true);
     const getLocationData = async () => {

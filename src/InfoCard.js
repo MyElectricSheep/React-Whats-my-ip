@@ -8,7 +8,7 @@ import cogoToast from "cogo-toast";
 const InfoCard = ({ data: { countryData, ip, city, country } }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(ip);
-    cogoToast.success("IP address has been copied to your clipboard!");
+    cogoToast.success("Your IP address has been copied to the clipboard!");
   };
 
   return (
