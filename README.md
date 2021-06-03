@@ -9,6 +9,8 @@ The app calls 2 separate APIs:
 - [Geo Ipify](https://geo.ipify.org) for the IP address itself and the timezone/location data
 - [Rest Countries](https://restcountries.eu/) for additional country info (like the flag)
 
+The user will also be prompted for access to the more precise geolocation of the browser. If the prompt is refused 💁, the app will just fallback to the slightly less precise location data derived from the IP address ✅
+
 # 🗺️ How about the map?
 
 [Leaflet](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/) are used to show a map of the user's current location.
