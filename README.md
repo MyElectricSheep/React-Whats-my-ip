@@ -6,8 +6,8 @@ Click on the IP to copy it to your clipboard.
 
 The app calls 2 separate APIs:
 
-[Geo Ipify](https://geo.ipify.org) for the IP address itself and the timezone/location data
-[Rest Countries](https://restcountries.eu/) for additional country info (like the flag)
+- [Geo Ipify](https://geo.ipify.org) for the IP address itself and the timezone/location data
+- [Rest Countries](https://restcountries.eu/) for additional country info (like the flag)
 
 # 🗺️ How about the map?
 
