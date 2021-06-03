@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 const InfoCard = ({ data: { countryData, ip, city, country } }) => {
   return (
     <Grid style={{ height: "50vh" }} container>
-      <Grid.Row centered>
+      <Grid.Row centered style={{ paddingTop: "0em", paddingBottom: "0em" }}>
         <Card
           raised
           style={{

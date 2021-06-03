@@ -103,11 +103,11 @@ class App extends React.Component {
         timezone: ipData.location.timezone,
         country: countryData.name,
         countryData,
-        isLoaded: true
+        isLoaded: true,
       });
     } else {
       this.setState({
-        isProblem: true
+        isProblem: true,
       });
     }
   }
@@ -121,12 +121,12 @@ class App extends React.Component {
               <Header
                 as="h2"
                 style={{
-                  paddingTop: "1em",
+                  // paddingTop: "1em",
                   paddingRight: window.innerWidth > 450 ? "1em" : "0em",
                   fontFamily: "Patua One, cursive",
                   fontSize: "2.9em",
                   textShadow:
-                    "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff"
+                    "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff",
                 }}
               >
                 <Image

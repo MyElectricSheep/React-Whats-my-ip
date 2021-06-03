@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 // Semantic UI imports
-import { Image, Header } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 
 // Custom components imports
 import UserMap from "./UserMap";
@@ -94,18 +94,8 @@ const App = () => {
       <>
         <div className="ipCard">
           <div className="cardHeader">
-            <Header
-              as="h2"
-              style={{
-                fontFamily: "Patua One, cursive",
-                fontSize: "2.9em",
-                textShadow:
-                  "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff",
-              }}
-            >
-              <img src={IpLogo} id="ipLogo" alt="What's my IP logo" /> What's My
-              IP?
-            </Header>
+            <img src={IpLogo} id="ipLogo" alt="What's my IP logo" />
+            <h2 className="cardHeaderText">What's My IP?</h2>
           </div>
           <InfoCard data={location} />
         </div>
