@@ -3,8 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, Image, Grid } from "semantic-ui-react";
 import { faClock, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { DateTime } from "luxon";
+import cogoToast from "cogo-toast";
 
 const InfoCard = ({ data: { countryData, ip, city, country } }) => {
+  const handleCopy = () => {
+    navigator.clipboard.writeText(ip);
+    cogoToast.success("IP address has been copied to your clipboard!");
+  };
+
   return (
     <Grid style={{ height: "50vh" }} container>
       <Grid.Row centered style={{ paddingTop: "0em", paddingBottom: "0em" }}>
@@ -27,7 +33,16 @@ const InfoCard = ({ data: { countryData, ip, city, country } }) => {
               alignItems: "center",
             }}
           >
-            <Card.Header>Your IP address is {ip}</Card.Header>
+            <Card.Header>
+              Your IP address is{" "}
+              <span
+                onClick={handleCopy}
+                className="ipData"
+                title="Click to copy!"
+              >
+                {ip}
+              </span>
+            </Card.Header>
             <Card.Description>
               You are currently located in {city}, {country}
             </Card.Description>

@@ -40,6 +40,14 @@
     -1px -1px 0 #fff;
 }
 
+.ipData {
+  cursor: pointer;
+}
+
+.ipData:hover {
+  color: grey;
+}
+
 @media only screen and (max-width: 600px) {
   #ipLogo {
     margin-bottom: -1.5em;
