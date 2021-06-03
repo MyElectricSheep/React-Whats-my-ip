@@ -1,7 +1,43 @@
+.center {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  z-index: 10;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
   position: relative;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 600px) {
+  #ipLogo {
+    display: none;
+  }
+}
+
+.errorBig {
+  font-size: 3rem;
+}
+
+.errorSmall {
+  font-size: 2rem;
+}
+
+.errorText {
+  text-align: center;
+  text-shadow: 0 0 1px white, 0 0 1px white, 0 0 1px white, 0 0 1px white;
 }
 
 .ipCard {

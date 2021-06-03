@@ -10,10 +10,23 @@ const InfoCard = ({ data: { countryData, ip, city, country } }) => {
       <Grid.Row centered>
         <Card
           raised
-          style={{ width: "60vw", maxWidth: "500px", minWidth: "200px" }}
+          style={{
+            width: "60vw",
+            maxWidth: "500px",
+            minWidth: "200px",
+            minHeight: "400px",
+            maxHeight: "500px",
+          }}
         >
           <Image src={countryData.flag} wrapped ui={false} />
-          <Card.Content>
+          <Card.Content
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Card.Header>Your IP address is {ip}</Card.Header>
             <Card.Description>
               You are currently located in {city}, {country}
