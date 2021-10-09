@@ -26,112 +26,154 @@ const App = () => {
 
   const { REACT_APP_IPIFY_API_KEY } = process.env;
 
+  const countriesQuery = (countryCode) => `
+  {
+    country(code:"${countryCode}")
+     {
+       name
+       native
+       emoji
+       currency
+       languages {
+         code
+         name
+        }
+       }
+      }
+  `;
+
   // Option 1: the then chain
   // Chain multiple thens together (on the same level, no callback style imbrication)
   // And make the data flow down the then chain
   // Don't forget to return from your then if you want the data to be available further down!
   // https://javascript.info/promise-chaining
   // https://nodejs.dev/learn/understanding-javascript-promises
-  //   useEffect(() => {
-  //     let ipify;
-  //     setIsLoading(true);
-  //     axios
-  //       .get(`https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`)
-  //       .then(({ data: ipifyData }) => {
-  //         ipify = ipifyData;
-  //         return axios.get(
-  //           `https://restcountries.eu/rest/v2/alpha/${ipifyData.location.country}`
-  //         );
-  //       })
-  //       .then(({ data: restCountriesData }) => {
-  //         setLocation({
-  //           ip: ipify.ip,
-  //           lat: ipify.location.lat,
-  //           lng: ipify.location.lng,
-  //           country: restCountriesData.name,
-  //           region: ipify.location.region,
-  //           city: ipify.location.city,
-  //           timezone: ipify.location.timezone,
-  //           countryData: restCountriesData,
-  //         });
-  //         setIsLoading(false);
-  //       })
-  //       .catch((e) => {
-  //         console.log(e.message);
-  //         setIsError(true);
-  //         setIsLoading(false);
-  //       });
-  //   }, [REACT_APP_IPIFY_API_KEY]);
-
-  // Option 2:split the chain apart in single pieces that you need,
-  // and use Promise.all to bring them all together
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     const ipData = axios.get(
-  //       `https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`
-  //     );
-  //     const geoData = ipData.then((res) =>
-  //       axios.get(
-  //         `https://restcountries.eu/rest/v2/alpha/${res.data.location.country}`
-  //       )
-  //     );
-  //     Promise.all([ipData, geoData])
-  //       .then(([ip, geo]) => {
-  //         setLocation({
-  //           ip: ip.data.ip,
-  //           lat: ip.data.location.lat,
-  //           lng: ip.data.location.lng,
-  //           region: ip.data.location.region,
-  //           city: ip.data.location.city,
-  //           timezone: ip.data.location.timezone,
-  //           country: geo.data.name,
-  //           countryData: geo.data,
-  //         });
-  //         setIsLoading(false);
-  //       })
-  //       .catch((e) => {
-  //         console.log(e.message);
-  //         setIsError(true);
-  //         setIsLoading(false);
-  //       });
-  //   }, [REACT_APP_IPIFY_API_KEY]);
-
-  // Option 3: use async/await
   useEffect(() => {
+    let ipify;
     setIsLoading(true);
-    const getLocationData = async () => {
-      try {
-        const { data: ipData } = await axios.get(
-          `https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`
-        );
-        const { data: countryData } = await axios.get(
-          `https://restcountries.eu/rest/v2/alpha/${
-            ipData && ipData.location.country
-          }`
-        );
-        if (ipData && countryData) {
-          setLocation({
-            ip: ipData.ip,
-            lat: ipData.location.lat,
-            lng: ipData.location.lng,
-            region: ipData.location.region,
-            city: ipData.location.city,
-            timezone: ipData.location.timezone,
-            country: countryData.name,
-            countryData,
-          });
-          setIsLoading(false);
-        } else {
-          throw new Error("ipData and countryData were not fetched properly");
-        }
-      } catch (e) {
+    axios
+      .get(`https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`)
+      .then(({ data: ipifyData }) => {
+        ipify = ipifyData;
+        return axios({
+          url: "https://countries.trevorblades.com/",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            query: countriesQuery(ipifyData.location.country),
+          },
+        });
+      })
+      .then(({ data: geoData }) => {
+        setLocation({
+          ip: ipify.ip,
+          lat: ipify.location.lat,
+          lng: ipify.location.lng,
+          region: ipify.location.region,
+          city: ipify.location.city,
+          timezone: ipify.location.timezone,
+          country: ipify.location.country,
+          countryData: geoData.data.country,
+        });
+        setIsLoading(false);
+      })
+      .catch((e) => {
         console.log(e.message);
         setIsError(true);
         setIsLoading(false);
-      }
-    };
-    getLocationData();
+      });
   }, [REACT_APP_IPIFY_API_KEY]);
+
+  // Option 2:split the chain apart in single pieces that you need,
+  // and use Promise.all to bring them all together
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const ipData = axios.get(
+  //     `https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`
+  //   );
+  //   const geoData = ipData.then((res) =>
+  //     axios({
+  //       url: "https://countries.trevorblades.com/",
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //       data: {
+  //         query: countriesQuery(res.data.location.country)
+  //       }
+  //     })
+  //   );
+  //   Promise.all([ipData, geoData])
+  //     .then(([ip, geo]) => {
+  //       console.log(geo);
+  //       setLocation({
+  //         ip: ip.data.ip,
+  //         lat: ip.data.location.lat,
+  //         lng: ip.data.location.lng,
+  //         region: ip.data.location.region,
+  //         city: ip.data.location.city,
+  //         timezone: ip.data.location.timezone,
+  //         country: ip.data.location.country,
+  //         countryData: geo.data.data.country
+  //       });
+  //       setIsLoading(false);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e.message);
+  //       setIsError(true);
+  //       setIsLoading(false);
+  //     });
+  // }, [REACT_APP_IPIFY_API_KEY]);
+
+  // Option 3: use async/await
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const getLocationData = async () => {
+  //     try {
+  //       const { data: ipData } = await axios.get(
+  //         `https://geo.ipify.org/api/v1?apiKey=${REACT_APP_IPIFY_API_KEY}`
+  //       );
+  //       console.log({ ipData });
+  //       const {
+  //         data: {
+  //           data: { country: countryData }
+  //         }
+  //       } = await axios({
+  //         url: "https://countries.trevorblades.com/",
+  //         method: "post",
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         },
+  //         data: {
+  //           query: countriesQuery(ipData.location.country)
+  //         }
+  //       });
+  //       console.log({ countryData });
+  //       if (ipData && countryData) {
+  //         setLocation({
+  //           ip: ipData.ip,
+  //           lat: ipData.location.lat,
+  //           lng: ipData.location.lng,
+  //           region: ipData.location.region,
+  //           city: ipData.location.city,
+  //           timezone: ipData.location.timezone,
+  //           country: ipData.location.country,
+  //           countryData
+  //         });
+  //         setIsLoading(false);
+  //       } else {
+  //         throw new Error("ipData and countryData were not fetched properly");
+  //       }
+  //     } catch (e) {
+  //       console.log(e.message);
+  //       setIsError(true);
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   getLocationData();
+  // }, [REACT_APP_IPIFY_API_KEY]);
 
   // You can use the geolocation API of the browser to determine
   // a user's location easily (the user will choose whether

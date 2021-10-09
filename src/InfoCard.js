@@ -24,7 +24,12 @@ const InfoCard = ({ data: { countryData, ip, city, country } }) => {
             maxHeight: "500px",
           }}
         >
-          <Image src={countryData.flag} wrapped ui={false} />
+          <Image
+            // https://flagpedia.net/download/api
+            src={`https://flagcdn.com/w640/${country.toLowerCase()}.png`}
+            wrapped
+            ui={false}
+          />
           <Card.Content
             style={{
               display: "flex",
@@ -44,7 +49,7 @@ const InfoCard = ({ data: { countryData, ip, city, country } }) => {
               </span>
             </Card.Header>
             <Card.Description>
-              You are currently located in {city}, {country}
+              You are currently located in {city}, {countryData.name}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
