@@ -4,6 +4,8 @@ This is an application to display your current IP address, as well as a map of y
 
 Click on the IP to copy it to your clipboard.
 
+![What's My IP](https://raw.githubusercontent.com/MyElectricSheep/React-Whats-my-ip/main/whats-my-ip-screenshot.png)
+
 The app calls 2 separate APIs:
 
 - [Geo Ipify](https://geo.ipify.org) for the IP address itself and the timezone/location data
@@ -20,4 +22,4 @@ The user will also be prompted for access to the more precise geolocation of the
 
 # 🚀 Live version
 
-A [live version of the app](https://whatsmy-ip.netlify.app/) can be found here!
+A [live version of the app](https://ip.ben.express/) can be found here!
