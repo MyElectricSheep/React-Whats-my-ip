@@ -1,5 +1,7 @@
 #  🌎 What's My IP ?
 
+This app was created as teaching support material for the [WBS Coding School](https://www.wbscodingschool.com/) to introduce students to some **React** concept. 
+
 This is an application to display your current IP address, as well as a map of your current location, and some extra time/place info (in case you don't remember where you are 🧭😉) !
 
 Click on the IP to copy it to your clipboard.
